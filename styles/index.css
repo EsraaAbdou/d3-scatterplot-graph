@@ -1,0 +1,17 @@
+body{
+    background-color: thistle;
+}
+.svg-container {
+    width: 80%;
+    margin: 50px auto 0 auto;
+}
+.bar {
+    fill: red;
+}
+.bar:hover{
+    fill: transparent;
+}
+#title{
+    fill: black;
+    font-size: 24px;
+}
