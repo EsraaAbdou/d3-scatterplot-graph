@@ -67,6 +67,71 @@ function drawChart(dataset) {
       .attr("cy", d => yScale(time2Date(d)))
       .attr("r", "5")
       .attr("class", "dot")
+      .on("mouseover", (event,d) => {
+         console.log(d)
+         // for the tooltip
+         const targetBar = event.target;
+         const xVal = targetBar.getAttribute("cx");
+         const yVal = targetBar.getAttribute("cy");
+         const tooltipX = parseFloat(xVal) + 5;
+         const tooltipY = parseFloat(yVal) + 5;
+         const textOffset = 20;
+        
+         svg.select("#tooltip")
+            .attr("x", tooltipX)
+            .attr("y", tooltipY)
+            .attr("data-year", d.Year)
+            .style("visibility", "visible");
+
+         svg.select("#tooltip-text")
+            .attr("x", tooltipX + textOffset)
+            .attr("y", tooltipY + textOffset)
+            .style("visibility", "visible");
+
+         svg.select("#tooltip-name")
+            .text(`${d.Name}: ${d.Nationality}`);
+         svg.select("#tooltip-time")
+            .text(`Year: ${d.Year}, Time: ${d.Time}`)
+            .attr("x", tooltipX + textOffset);
+         svg.select("#tooltip-doping")
+            .text(`${d.Doping}`)
+            .attr("x", tooltipX + textOffset);
+      })
+      .on("mouseout", (event) => {
+         // for the tooltip
+         if(!event.relatedTarget || event.relatedTarget.getAttribute("class") !== "dot"){
+            svg.select("#tooltip")
+               .style("visibility", "hidden");
+               
+            svg.select("#tooltip-text")
+               .style("visibility", "hidden");
+         } 
+      });
+
+   // adding tooltip
+   svg.append("rect")
+      .attr("width", tooltipWidth)
+      .attr("height", tooltipHeight)
+      .attr("rx", 10)
+      .attr("fill", "grey")
+      .attr("id", "tooltip")
+      .style("visibility", "hidden");   
+
+      const tooltipText = svg.append("text")
+                             .attr("fill", "white")
+                             .attr("id", "tooltip-text")
+                             .style("font-size", "10px")
+                             .style("visibility", "hidden");
+
+      tooltipText.append("tspan")
+                 .attr("id", "tooltip-name")
+      tooltipText.append("tspan")
+                 .attr("id", "tooltip-time")
+                 .attr("dy", 20)
+      tooltipText.append("tspan")
+                 .attr("id","tooltip-doping")
+                 .attr("dy", 30)
+         
 }
 
 function time2Date(d){
