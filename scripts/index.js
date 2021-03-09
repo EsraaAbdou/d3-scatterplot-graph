@@ -55,6 +55,18 @@ function drawChart(dataset) {
       .attr("y", padding)
       .attr("id","title")
       .text("Doping in Professional Bicycle Racing");
+
+   // adding dots
+   svg.selectAll("circle")
+      .data(dataset)
+      .enter()
+      .append("circle")
+      .attr("data-xvalue", d => d.Year)
+      .attr("data-yvalue", d => time2Date(d))
+      .attr("cx", d => xScale(d.Year))
+      .attr("cy", d => yScale(time2Date(d)))
+      .attr("r", "5")
+      .attr("class", "dot")
 }
 
 function time2Date(d){
