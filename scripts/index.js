@@ -4,7 +4,6 @@ xhttp.send();
 xhttp.onreadystatechange = function() {
     if(this.readyState==4 && this.status==200){ 
         const dataset = JSON.parse(this.responseText)
-        console.log(dataset)
         drawChart(dataset)
     }      
 };
@@ -39,6 +38,14 @@ function drawChart(dataset) {
       return min + ":" + sec;
    });
 
+   svg.append("text")
+   .attr("transform", "rotate(-90)")
+   .attr("y", 0 )
+   .attr("x",0 - (h / 2))
+   .attr("dy", "1em")
+   .style("text-anchor", "middle")
+   .text("Time in Minutes");
+
    svg.append("g")
       .attr("transform", "translate(0," + (h - padding) + ")")
       .attr("id", "x-axis")
@@ -51,9 +58,10 @@ function drawChart(dataset) {
 
    // adding title
    svg.append("text")
-      .attr("x", w/2 - 150)
+      .attr("x", w/2)
       .attr("y", padding)
       .attr("id","title")
+      .style("text-anchor", "middle")
       .text("Doping in Professional Bicycle Racing");
 
    // adding dots
@@ -68,7 +76,6 @@ function drawChart(dataset) {
       .attr("r", "5")
       .attr("class", "dot")
       .on("mouseover", (event,d) => {
-         console.log(d)
          // for the tooltip
          const targetBar = event.target;
          const xVal = targetBar.getAttribute("cx");
@@ -139,6 +146,5 @@ function time2Date(d){
    const temp = new Date();
    temp.setMinutes(timeArr[0]);
    temp.setSeconds(timeArr[1]);
-   console.log(temp)
    return temp;
 }
