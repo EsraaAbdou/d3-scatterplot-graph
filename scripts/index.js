@@ -48,6 +48,13 @@ function drawChart(dataset) {
       .attr("transform", "translate(" + padding+ ",0)")
       .attr("id", "y-axis")
       .call(yAxis);
+
+   // adding title
+   svg.append("text")
+      .attr("x", w/2 - 150)
+      .attr("y", padding)
+      .attr("id","title")
+      .text("Doping in Professional Bicycle Racing");
 }
 
 function time2Date(d){
