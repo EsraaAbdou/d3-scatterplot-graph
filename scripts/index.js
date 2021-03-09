@@ -3,18 +3,25 @@ xhttp.open("GET", "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferen
 xhttp.send();
 xhttp.onreadystatechange = function() {
     if(this.readyState==4 && this.status==200){ 
-        const dataset = JSON.parse(this.responseText)
-        drawChart(dataset)
+        const dataset = JSON.parse(this.responseText);
+        drawChart(dataset);
+        console.log(dataset)
     }      
 };
 
 function drawChart(dataset) {
-   // create SVG
+   // SVG variables
    const padding = 60;
    const w = 1200;
    const h = 600;
+   // tooltip variables
    const tooltipWidth = 300;
    const tooltipHeight = 90;
+   // legend variables
+   const legendKeys = ["No doping allegations", "Riders with doping allegations"];
+   const colors = ["green", "navy"];
+   
+   // create SVG
    const svg = d3.select("div")
                  .append("svg")
                  .attr("preserveAspectRatio", "xMinYMin meet")
@@ -75,6 +82,7 @@ function drawChart(dataset) {
       .attr("cy", d => yScale(time2Date(d)))
       .attr("r", "5")
       .attr("class", "dot")
+      .attr("fill", d => d.Doping? colors[1] : colors[0])
       .on("mouseover", (event,d) => {
          // for the tooltip
          const targetBar = event.target;
@@ -131,14 +139,37 @@ function drawChart(dataset) {
                              .style("visibility", "hidden");
 
       tooltipText.append("tspan")
-                 .attr("id", "tooltip-name")
+                 .attr("id", "tooltip-name");
       tooltipText.append("tspan")
                  .attr("id", "tooltip-time")
-                 .attr("dy", 20)
+                 .attr("dy", 20);
       tooltipText.append("tspan")
                  .attr("id","tooltip-doping")
-                 .attr("dy", 30)
-         
+                 .attr("dy", 30);
+
+   // adding legend
+   const legend = svg.append("g")
+                     .attr("id","legend")
+                     .attr("transform", `translate(${3*w/4},${h/4})`);
+   
+   legend.selectAll("rect")
+         .data(legendKeys)
+         .enter()
+         .append("rect")
+         .attr("x", 0)
+         .attr("y", (d,i) => 40*i)
+         .attr("width", 20)
+         .attr("height", 20)
+         .attr("fill", (d,i) => colors[i]);
+
+   legend.selectAll("text")
+         .data(legendKeys)
+         .enter()
+         .append("text")
+         .attr("x", 30)
+         .attr("y", (d,i) => 15 + 40*i)
+         .attr("fill", (d,i) => colors[i])
+         .text(d => d);     
 }
 
 function time2Date(d){
